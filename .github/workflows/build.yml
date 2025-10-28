@@ -1,20 +1,18 @@
 name: Build ZMK (Charybdis 4x6 RGB / nice!nano v2)
 
-on:
-  push:
-    branches: ["**"]
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
-  left:
+  build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
     with:
-      shield: charybdis_4x6_rgb_left
-      board: nice_nano_v2
-      artifact-name: left
-  right:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-    with:
-      shield: charybdis_4x6_rgb_right
-      board: nice_nano_v2
-      artifact-name: right
+      # あなたのキー配置や.conf/.keymapが入っているフォルダ
+      config_path: config
+
+      # ←ここでビルド対象(左/右)をまとめて指定
+      build_matrix: |
+        include:
+          - board: nice_nano_v2
+            shield: charybdis_4x6_left_rgb
+          - board: nice_nano_v2
+            shield: charybdis_4x6_right_rgb
