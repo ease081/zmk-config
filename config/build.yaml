@@ -1,0 +1,6 @@
+# Change shields to non-RGB if your board has no LEDs.
+include:
+  - board: nice_nano_v2
+    shield: charybdis_4x6_rgb_left
+  - board: nice_nano_v2
+    shield: charybdis_4x6_rgb_right
