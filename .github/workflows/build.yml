@@ -2,39 +2,55 @@ name: Build ZMK (Charybdis 4x6 on nice!nano v2)
 
 on:
   push:
-    branches: [ "**" ]
+    branches: ["**"]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/zmkfirmware/zmk-build:stable
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: West init (use this repo as config)
-        run: west init -l config
+      # ghcr.io に GITHUB_TOKEN でログイン（匿名 pull 失敗対策）
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: West update (fetch ZMK source)
-        run: west update
+      - name: Pull ZMK build image
+        run: docker pull ghcr.io/zmkfirmware/zmk-build:stable
 
-      # ★ RGB付きならこのまま。RGBなし個体なら _rgb を外す（下に注記）
-      - name: Build LEFT
-        run: west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_left
-
-      - name: Build RIGHT
-        run: west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_right
-
-      - name: Collect UF2s
+      # LEFT をビルド
+      - name: Build LEFT (RGB版。RGBなしは下の注記参照)
         run: |
-          cp build/left/zephyr/zmk.uf2  left.uf2
-          cp build/right/zephyr/zmk.uf2 right.uf2
+          docker run --rm -v "$PWD":/work -w /work ghcr.io/zmkfirmware/zmk-build:stable bash -lc "
+            west init -l config &&
+            west update &&
+            west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_left &&
+            cp build/left/zephyr/zmk.uf2 left.uf2
+          "
 
-      - name: Upload artifacts
+      # RIGHT をビルド
+      - name: Build RIGHT
+        run: |
+          docker run --rm -v "$PWD":/work -w /work ghcr.io/zmkfirmware/zmk-build:stable bash -lc "
+            west init -l config &&
+            west update &&
+            west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_right &&
+            cp build/right/zephyr/zmk.uf2 right.uf2
+          "
+
+      - name: Upload UF2 artifacts
         uses: actions/upload-artifact@v4
         with:
           name: firmware-uf2
