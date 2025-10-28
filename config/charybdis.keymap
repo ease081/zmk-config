@@ -1,37 +1,29 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
+
 / {
-  keymap {
-    compatible = "zmk,keymap";
+    keymap {
+        compatible = "zmk,keymap";
 
-    default_layer {
-      bindings = <
-        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Q   &kp Y   &kp U   &kp I     &kp O     &kp P
-        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Q   &kp Y   &kp U   &kp I     &kp O     &kp P
-        &kp Q   &kp A   &kp S   &kp D   &kp F   &kp G            &kp Q   &kp H   &kp J   &kp K     &kp L     &kp SCLN
-        &kp Q   &kp Z   &kp X   &kp C   &kp V   &kp B            &kp Q   &kp N   &kp M   &kp COMMA &kp DOT   &kp SLASH
-                              &mo NAV  &kp SPACE &kp ENTER    &kp BSPC &kp TAB   &mo SYM
-      >;
-    };
+        default_layer {
+            bindings = <
+&kp ESC  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp MINUS  &kp TAB  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &kp CARET  &kp LEFT_SHIFT  &kp A  &kp S  &kp D  &kp F  &kp G  &kp H  &kp J  &kp K  &kp L  &to 1  &to 2  &kp LEFT_CONTROL  &kp Z  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA  &kp DOT  &kp SLASH  &kp COLON  &kp LANG_ZENKAKUHANKAKU  &kp SPACE  &kp BACKSPACE  &kp DEL  &kp ENTER  &kp LWIN
+            >;
+        };
 
-    nav_layer {
-      label = "NAV";
-      bindings = <
-        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Q   &kp Y   &kp U   &kp I     &kp O     &kp P
-        &kp Q   &kp ESC  &kp HOME &kp UP   &kp END  &kp PG_UP     &kp Q   &kp INS  &kp LEFT &kp DOWN &kp RGHT &kp DEL
-        &kp Q   &trans   &trans   &trans   &trans   &trans        &kp Q   &trans   &trans   &trans   &trans   &trans
-        &kp Q   &trans   &trans   &trans   &trans   &trans        &kp Q   &trans   &trans   &trans   &trans   &trans
-                               &trans     &trans     &trans      &trans     &trans    &trans
-      >;
-    };
+        nav_layer {
+            label = "NAV";
+            bindings = <
+&kp Q  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Q  &kp Y  &kp U  &kp I  &kp O  &kp P  &kp Q  &kp ESC  &kp HOME  &kp UP  &kp END  &kp PG_UP  &kp Q  &kp LC(X)  &kp LC(C)  &kp LC(V)  &kp RGHT  &kp DEL  &kp Q  &trans  &trans  &trans  &trans  &trans  &kp Q  &mkp MB1  &mkp MB3  &mkp MB2  &trans  &trans  &kp Q  &trans  &trans  &trans  &trans  &trans  &kp Q  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
 
-    sym_layer {
-      label = "SYM";
-      bindings = <
-        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Y   &kp U   &kp I     &kp O     &kp P
-        &kp Q   &kp EXCL &kp AT   &kp HASH &kp DLLR &kp PERC      &kp CARET &kp AMPS &kp STAR &kp LBKT  &kp RBKT
-        &kp Q   &kp GRAVE &kp MINUS &kp EQUAL &kp LPAR &kp RPAR   &kp UNDER &kp PLUS &kp PIPE &kp LBRACE &kp RBRACE
-        &kp Q   &kp TILDE &kp BSLS  &kp COLON &kp LT   &kp GT     &kp QUOT  &kp DQUO &kp QUEST &kp LBRC  &kp RBRC
-                               &trans   &trans   &trans      &trans    &trans    &trans
-      >;
+        sym_layer {
+            label = "SYM";
+            bindings = <
+&kp Q  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp I  &kp O  &kp P  &kp Q  &kp EXCL  &kp AT  &kp HASH  &kp DLLR  &kp PERC  &kp CARET  &kp AMPS  &kp STAR  &kp LBKT  &kp RBKT  &kp Q  &kp GRAVE  &kp MINUS  &kp EQUAL  &kp LPAR  &kp RPAR  &kp UNDER  &kp PLUS  &kp PIPE  &kp LBRACE  &kp RBRACE  &kp Q  &kp TILDE  &kp BSLS  &kp COLON  &kp LT  &kp GT  &kp QUOT  &kp DQUO  &kp QUEST  &kp LBRC  &kp RBRC  &trans  &trans  &trans  &trans  &trans  &trans
+            >;
+        };
     };
-  };
 };
