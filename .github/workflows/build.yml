@@ -1,69 +1,20 @@
-name: Build ZMK (Charybdis 4x6 on nice!nano v2)
+name: Build ZMK (Charybdis 4x6 RGB / nice!nano v2)
 
 on:
   push:
     branches: ["**"]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  packages: read
-
 jobs:
-  build:
-    runs-on: ubuntu-24.04
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Pull ZMK image (retry)
-        run: |
-          for i in 1 2 3; do
-            docker pull ghcr.io/zmkfirmware/zmk-build:stable && break
-            echo "retrying in 8s... ($i/3)"; sleep 8
-          done
-
-      # 125対策：docker run を公式ラッパーで実行
-      - name: Build LEFT (RGB)
-        uses: addnab/docker-run-action@v3
-        with:
-          image: ghcr.io/zmkfirmware/zmk-build:stable
-          options: -v ${{ github.workspace }}:/work -w /work
-          run: |
-            set -e
-            rm -rf build/left || true
-            west init -l config
-            west update
-            west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_left
-            cp build/left/zephyr/zmk.uf2 left.uf2
-
-      - name: Build RIGHT (RGB)
-        uses: addnab/docker-run-action@v3
-        with:
-          image: ghcr.io/zmkfirmware/zmk-build:stable
-          options: -v ${{ github.workspace }}:/work -w /work
-          run: |
-            set -e
-            rm -rf build/right || true
-            west init -l config
-            west update
-            west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_right
-            cp build/right/zephyr/zmk.uf2 right.uf2
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware-uf2
-          path: |
-            left.uf2
-            right.uf2
+  left:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      shield: charybdis_4x6_rgb_left
+      board: nice_nano_v2
+      artifact-name: left
+  right:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      shield: charybdis_4x6_rgb_right
+      board: nice_nano_v2
+      artifact-name: right
