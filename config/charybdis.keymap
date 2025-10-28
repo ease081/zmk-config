@@ -4,9 +4,10 @@
 
     default_layer {
       bindings = <
-        &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Y   &kp U   &kp I     &kp O     &kp P
-        &kp A   &kp S   &kp D   &kp F   &kp G            &kp H   &kp J   &kp K     &kp L     &kp SCLN
-        &kp Z   &kp X   &kp C   &kp V   &kp B            &kp N   &kp M   &kp COMMA &kp DOT   &kp SLASH
+        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Q   &kp Y   &kp U   &kp I     &kp O     &kp P
+        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Q   &kp Y   &kp U   &kp I     &kp O     &kp P
+        &kp Q   &kp A   &kp S   &kp D   &kp F   &kp G            &kp Q   &kp H   &kp J   &kp K     &kp L     &kp SCLN
+        &kp Q   &kp Z   &kp X   &kp C   &kp V   &kp B            &kp Q   &kp N   &kp M   &kp COMMA &kp DOT   &kp SLASH
                               &mo NAV  &kp SPACE &kp ENTER    &kp BSPC &kp TAB   &mo SYM
       >;
     };
@@ -14,9 +15,10 @@
     nav_layer {
       label = "NAV";
       bindings = <
-        &kp ESC  &kp HOME &kp UP   &kp END  &kp PG_UP     &kp INS  &kp LEFT &kp DOWN &kp RGHT &kp DEL
-        &trans   &trans   &trans   &trans   &trans        &trans   &trans   &trans   &trans   &trans
-        &trans   &trans   &trans   &trans   &trans        &trans   &trans   &trans   &trans   &trans
+        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Q   &kp Y   &kp U   &kp I     &kp O     &kp P
+        &kp Q   &kp ESC  &kp HOME &kp UP   &kp END  &kp PG_UP     &kp Q   &kp INS  &kp LEFT &kp DOWN &kp RGHT &kp DEL
+        &kp Q   &trans   &trans   &trans   &trans   &trans        &kp Q   &trans   &trans   &trans   &trans   &trans
+        &kp Q   &trans   &trans   &trans   &trans   &trans        &kp Q   &trans   &trans   &trans   &trans   &trans
                                &trans     &trans     &trans      &trans     &trans    &trans
       >;
     };
@@ -24,9 +26,10 @@
     sym_layer {
       label = "SYM";
       bindings = <
-        &kp EXCL &kp AT   &kp HASH &kp DLLR &kp PERC      &kp CARET &kp AMPS &kp STAR &kp LBKT  &kp RBKT
-        &kp GRAVE &kp MINUS &kp EQUAL &kp LPAR &kp RPAR   &kp UNDER &kp PLUS &kp PIPE &kp LBRACE &kp RBRACE
-        &kp TILDE &kp BSLS  &kp COLON &kp LT   &kp GT     &kp QUOT  &kp DQUO &kp QUEST &kp LBRC  &kp RBRC
+        &kp Q   &kp Q   &kp W   &kp E   &kp R   &kp T            &kp Y   &kp U   &kp I     &kp O     &kp P
+        &kp Q   &kp EXCL &kp AT   &kp HASH &kp DLLR &kp PERC      &kp CARET &kp AMPS &kp STAR &kp LBKT  &kp RBKT
+        &kp Q   &kp GRAVE &kp MINUS &kp EQUAL &kp LPAR &kp RPAR   &kp UNDER &kp PLUS &kp PIPE &kp LBRACE &kp RBRACE
+        &kp Q   &kp TILDE &kp BSLS  &kp COLON &kp LT   &kp GT     &kp QUOT  &kp DQUO &kp QUEST &kp LBRC  &kp RBRC
                                &trans   &trans   &trans      &trans    &trans    &trans
       >;
     };
