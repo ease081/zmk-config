@@ -19,7 +19,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ghcr.io にログイン（匿名 pull 失敗対策）
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
@@ -27,39 +26,40 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # イメージ取得（リトライ付き）
-      - name: Pull ZMK build image (retry)
+      - name: Pull ZMK image (retry)
         run: |
-          for i in 1 2 3 4; do
+          for i in 1 2 3; do
             docker pull ghcr.io/zmkfirmware/zmk-build:stable && break
-            echo "retrying in 6s... ($i/4)"; sleep 6
+            echo "retrying in 8s... ($i/3)"; sleep 8
           done
 
-      # コンテナ内で走らせる内容をスクリプト化（クォート地獄を回避）
-      - name: Write build script
-        run: |
-          cat > build_inside.sh <<'EOF'
-          set -e
-          west init -l config
-          west update
-          # ★RGBなし個体なら _rgb を外してください（下に注記）
-          west build -s zmk/app -d build/left  -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_left
-          cp build/left/zephyr/zmk.uf2  left.uf2
-          west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_right
-          cp build/right/zephyr/zmk.uf2 right.uf2
-          EOF
-          chmod +x build_inside.sh
+      # 125対策：docker run を公式ラッパーで実行
+      - name: Build LEFT (RGB)
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/zmkfirmware/zmk-build:stable
+          options: -v ${{ github.workspace }}:/work -w /work
+          run: |
+            set -e
+            rm -rf build/left || true
+            west init -l config
+            west update
+            west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_left
+            cp build/left/zephyr/zmk.uf2 left.uf2
 
-      # スクリプトをマウントして実行
-      - name: Build in container
-        run: |
-          docker run --rm \
-            -v "$PWD":/work \
-            -w /work \
-            ghcr.io/zmkfirmware/zmk-build:stable \
-            bash /work/build_inside.sh
+      - name: Build RIGHT (RGB)
+        uses: addnab/docker-run-action@v3
+        with:
+          image: ghcr.io/zmkfirmware/zmk-build:stable
+          options: -v ${{ github.workspace }}:/work -w /work
+          run: |
+            set -e
+            rm -rf build/right || true
+            west init -l config
+            west update
+            west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_right
+            cp build/right/zephyr/zmk.uf2 right.uf2
 
-      # 生成物をアップロード
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
