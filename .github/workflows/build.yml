@@ -1,0 +1,43 @@
+name: Build ZMK (Charybdis 4x6 on nice!nano v2)
+
+on:
+  push:
+    branches: [ "**" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/zmkfirmware/zmk-build:stable
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: West init (use this repo as config)
+        run: west init -l config
+
+      - name: West update (fetch ZMK source)
+        run: west update
+
+      # ★ RGB付きならこのまま。RGBなし個体なら _rgb を外す（下に注記）
+      - name: Build LEFT
+        run: west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_left
+
+      - name: Build RIGHT
+        run: west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=charybdis_4x6_rgb_right
+
+      - name: Collect UF2s
+        run: |
+          cp build/left/zephyr/zmk.uf2  left.uf2
+          cp build/right/zephyr/zmk.uf2 right.uf2
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-uf2
+          path: |
+            left.uf2
+            right.uf2
